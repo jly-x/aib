@@ -15,12 +15,16 @@ import (
 )
 
 func initClient(ctx context.Context) *genai.Client {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatalf("Unexpected error loading .env file: %v", err)
+	key := os.Getenv("GOOGLE_API_KEY")
+
+	if key == "" {
+		err := godotenv.Load()
+		if err != nil {
+			log.Fatalf("The environment variable GOOGLE_API_KEY is not set, and there was an unexpected error loading .env file: %v", err)
+		}
+		key = os.Getenv("GOOGLE_API_KEY")
 	}
 
-	key := os.Getenv("GOOGLE_API_KEY")
 	if key == "" {
 		log.Fatalf("GOOGLE_API_KEY environment variable not set")
 	}
